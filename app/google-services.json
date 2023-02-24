@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "684935017609",
+    "project_id": "myproject-724e7",
+    "storage_bucket": "myproject-724e7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:684935017609:android:251c60f3e3d7160eb88258",
+        "android_client_info": {
+          "package_name": "com.sushil.githubapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "684935017609-546t6292lp0rum1l983700r0ao1g8gj6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1zIIq-DTo1Wf7y5VjdFU-8Ulg8hmCU7g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "684935017609-546t6292lp0rum1l983700r0ao1g8gj6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

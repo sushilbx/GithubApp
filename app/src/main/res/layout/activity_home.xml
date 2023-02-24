@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sushil.githubapp.HomeActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:liftOnScroll="true">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/mtHomeNotification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="5dp"
+                app:navigationIcon="@drawable/ic_baseline_dehaze_24"
+                app:title="Top Trending GitHub Repos"
+                android:background="@color/black"
+                app:titleTextColor="@color/white" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRepo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="vertical"/>
+
+
+    </LinearLayout>
+
+    <fragment
+        android:id="@+id/fragmentContainerSide"
+        android:name="com.sushil.githubapp.SideViewFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:layout_marginEnd="60dp" />
+</androidx.drawerlayout.widget.DrawerLayout>
+

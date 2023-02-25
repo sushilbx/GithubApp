@@ -5,17 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.OAuthCredential;
-import com.google.gson.Gson;
-
 
 public class SessionManager {
-
-    public static final String KEY_USER_DETAILS = "user_details";
-    public static final String KEY_CART_LIST = "cart_list";
+    public static final String USER_NAME = "user_name";
     private static final String PREF_NAME = "userData";
     private static final String IS_LOGIN = "isLogin";
     private static final String KEY_FIRST_TIME = "first_time";
@@ -31,15 +23,24 @@ public class SessionManager {
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
     }
-    public void createLoginSession(FirebaseUser firebaseUser) {
+    public void createLoginSession(String aceessToken) {
         editor.putBoolean(IS_LOGIN, true);
         editor.putBoolean(KEY_FIRST_TIME, true);
-        editor.putString(KEY_AUTH_DETAILS, new Gson().toJson(firebaseUser));
+        editor.putString(KEY_AUTH_DETAILS, aceessToken);
+        editor.commit();
+    }
+    public void createName(String userName) {
+        editor.putString(USER_NAME, userName);
         editor.commit();
     }
 
-    public FirebaseUser getLoginSession() {
-        return new Gson().fromJson(pref.getString(KEY_AUTH_DETAILS, ""), FirebaseUser.class);
+    public String getLoginSession() {
+        return pref.getString(KEY_AUTH_DETAILS, null);
+
+    }
+    public String getName() {
+        return pref.getString(USER_NAME, null);
+
     }
 
 
@@ -58,28 +59,8 @@ public class SessionManager {
     }
 
     public boolean isLoggedIn() {
-
         return pref.getBoolean(IS_LOGIN, false);
     }
-
-    public Boolean getFirstTime() {
-        return pref.getBoolean(KEY_FIRST_TIME, false);
-    }
-
-    public void setFirstTime(Boolean firstTime) {
-        editor.putBoolean(KEY_FIRST_TIME, firstTime);
-        editor.commit();
-    }
-
-    public boolean getFirstTimeLaunch() {
-        return pref.getBoolean(KEY_FIRST_TIME, true);
-    }
-
-    public void setFirstTimeLaunch(boolean isFirstTime) {
-        editor.putBoolean(KEY_FIRST_TIME, isFirstTime);
-        editor.commit();
-    }
-
 }
 
 

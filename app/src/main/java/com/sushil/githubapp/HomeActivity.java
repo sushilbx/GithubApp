@@ -1,64 +1,52 @@
 package com.sushil.githubapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.OAuthCredential;
-import com.google.firebase.auth.OAuthProvider;
 import com.google.gson.Gson;
 import com.sushil.githubapp.Api.RetrofitClient;
+import com.sushil.githubapp.databinding.ActivityHomeBinding;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity {
-    MaterialToolbar mtHomeNotification;
-    RecyclerView rvRepo;
-    String name;
+
+    ActivityHomeBinding b;
     DrawerLayout drawerLayout;
     SessionManager sessionManager;
-    OAuthProvider.Builder provider;
-  //  OAuthCredential firebaseUser;
+    String accessToken;
     TextView username;
-    String token;
+    String userName;
+    MaterialButton mbLogout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        b = ActivityHomeBinding.inflate(getLayoutInflater());
+        View view = b.getRoot();
+        setContentView(view);
         sessionManager = new SessionManager(HomeActivity.this);
-        //firebaseUser = sessionManager.getLoginSession();
-        Intent intent = getIntent();
-        name = intent.getStringExtra("githubUserName");
-        token = intent.getStringExtra("token");
+        accessToken = sessionManager.getLoginSession();
+        userName = sessionManager.getName();
         username = findViewById(R.id.username);
-        rvRepo = findViewById(R.id.rvRepo);
-        mtHomeNotification = findViewById(R.id.mtHomeNotification);
-        drawerLayout = findViewById(R.id.drawerLayout);
-        username.setText(name);
-        mtHomeNotification.setNavigationOnClickListener(new View.OnClickListener() {
+        mbLogout = findViewById(R.id.mbLogout);
+        drawerLayout =findViewById(R.id.drawerLayout);
+
+        username.setText(userName);
+        b.mtHomeNotification.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!drawerLayout.isOpen()) {
@@ -68,21 +56,24 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
+
         trendingRepo();
 
     }
 
     private void trendingRepo() {
-      //  Log.e("", authResult.getCredential().toString());
-        Call<RepoModel> call = RetrofitClient.getInstance().getApi().repo("Bearer "+token);
+        Log.e("sushil", accessToken);
+        b.rlLoading.setVisibility(View.VISIBLE);
+        Call<RepoModel> call = RetrofitClient.getInstance().getApi().repo("Bearer " + accessToken);
         call.enqueue(new Callback<RepoModel>() {
             @Override
             public void onResponse(Call<RepoModel> call, Response<RepoModel> response) {
+                b.rlLoading.setVisibility(View.GONE);
                 Log.e("other", new Gson().toJson(response.body()));
                 if (response.isSuccessful()) {
 
                     RepoAdapter repoAdapter = new RepoAdapter(response.body().items, HomeActivity.this);
-                    rvRepo.setAdapter(repoAdapter);
+                    b.rvRepo.setAdapter(repoAdapter);
 
                 }
             }
@@ -90,6 +81,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<RepoModel> call, Throwable t) {
                 Toast.makeText(HomeActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                b.rlLoading.setVisibility(View.GONE);
                 t.printStackTrace();
             }
         });

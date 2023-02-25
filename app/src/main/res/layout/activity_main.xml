@@ -24,7 +24,6 @@
                 android:id="@+id/githubId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:hint="Enter your email associated with github"
                 android:padding="8dp"
                 android:background="@color/white"

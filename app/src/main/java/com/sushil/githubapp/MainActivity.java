@@ -35,10 +35,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main);
+        sessionManager = new SessionManager(MainActivity.this);
         loginBtn = findViewById(R.id.github_login_btn);
         githubEdit = findViewById(R.id.githubId);
-
         provider = OAuthProvider.newBuilder("github.com");
         auth = FirebaseAuth.getInstance();
         provider.addCustomParameter("login", githubEdit.getText().toString());
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     private void signInWithGithubProvider() {
@@ -81,10 +84,13 @@ public class MainActivity extends AppCompatActivity {
                             firebaseUser = auth.getCurrentUser();
 
                             String accessToken = ((OAuthCredential)authResult.getCredential()).getAccessToken();
-                            //sessionManager.createLoginSession(firebaseUser);
+                            sessionManager.createLoginSession(accessToken);
+                            String userName= firebaseUser.getDisplayName();
+                            sessionManager.createName(userName);
+
+
                             Log.e("sushil", "githubUserName" + firebaseUser.getDisplayName() + "token: "+accessToken);
                             Toast.makeText(MainActivity.this, "Login Successfully", Toast.LENGTH_LONG).show();
-                            //Toast.makeText(MainActivity.this, "githubUserName" + firebaseUser.getDisplayName(), Toast.LENGTH_SHORT).show();
                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                             intent.putExtra("githubUserName", firebaseUser.getDisplayName());
                             intent.putExtra("token", accessToken);
